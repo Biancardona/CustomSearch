@@ -20,3 +20,6 @@
     pointer-events: none;
     color: #aaa;
 }
+.form-control{
+    display:inline-flex;
+}

@@ -15,21 +15,35 @@
 </head>
 
 <body>
+    <div class="row"> 
     <div class="container">
         <form action="#">
             <div class="form-group">
                 <select id="selectAll" class="selectpicker" data-actions-box="true" multiple>
-                    <option  value="1">California</option>
-                    <option  value="2">Florida</option>
-                    <option  value="3">Kentucky</option>
-                    <option  value="4">Pennsylvania</option>
-                    <option  value="5">SD</option>
-                    <option  value="6">Texas</option>
+                    <option value="1">California</option>
+                    <option value="2">Florida</option>
+                    <option value="3">Kentucky</option>
+                    <option value="4">Pennsylvania</option>
+                    <option value="5">SD</option>
+                    <option value="6">Texas</option>
                 </select>
             </div>
+
+            <div class="form-group">
+            <!-- Textarea with class .w-25 -->
+            <div class="form-outline w-25 mb-4">
+            
+                <label class="form-label" for="textAreaExample4">Must Not includes words</label>
+                <textarea class="form-control" id="textAreaExample4" placeholder="Must Not includes words" rows="3"></textarea>
+                <label class="form-label" for="textAreaExample4">Must Includes words</label>
+                <textarea class="form-control" id="textAreaExample3" placeholder="Must Includes words" rows="3"></textarea>
+           
+        </div>
+    </div>
             <div id="start" class="hidden">
 
                 <!-- The form -->
+
                 <div class="input-group">
                     <input id="query" type="text" class="form-control" placeholder="Search">
                     <div class="input-group-append">
@@ -40,6 +54,7 @@
                 </div>
             </div>
             <div id="content" class="hide show"> </div>
+        </div>
     </div>
     </div>
     </form>

@@ -1,17 +1,24 @@
-let key = "AIzaSyA5gbq4gQ83AEP633ET52IbloKJiKlOAks";       // API KEY
-let id = "9a352a89890a7adf4";                             // CSE ID
+let key = "AIzaSyA5gbq4gQ83AEP633ET52IbloKJiKlOAks"; // API KEY
+let id = "9a352a89890a7adf4"; // CSE ID
 
 let allStatesMap = new Map();
 
 allStatesMap["California"] = "site%3Awww.pharmacy.ca.gov";
 allStatesMap["Florida"] = "site%3Afloridaspharmacy.gov";
+allStatesMap["Kentucky"] = "site%3Apharmacy.ky.gov";
+allStatesMap["Pennsylvania"] = "site%3Awww.dos.pa.gov/ProfessionalLicensing/BoardsCommissions/Pharmacy";
+allStatesMap["SD"] = "site%3Adoh.sd.gov/boards/pharmacy";
+allStatesMap["Texas"] = "site%3Awww.pharmacy.texas.gov";
+
+
 
 
 window.onload = function () {
     document.querySelector('#search').addEventListener('click', triggerSearch)
 }
+
 function hndlr(response) {
-    console.log(response)               // a way to see your results
+    console.log(response) // a way to see your results
     for (var i = 0; i < response.items.length; i++) {
         var item = response.items[i];
 
@@ -20,14 +27,18 @@ function hndlr(response) {
 }
 
 const idContainer = document.querySelector('#container');
-const inputSearch = document.querySelector("#query")
-const results = document.querySelector("#content")
-const searchButton = document.querySelector("#start")
+const inputSearch = document.querySelector("#query");
+const results = document.querySelector("#content");
+const searchButton = document.querySelector("#start");
+const excludeWordParameter = document.querySelector("#textAreaExample4");
+const inlcudeWordParameter = document.querySelector("#textAreaExample3");
 
 
 function triggerSearch() {
     event.preventDefault();
     const input = inputSearch.value;
+    const excludeWords = excludeWordParameter.value;
+    const includeWords = inlcudeWordParameter.value;
     if (inputSearch.value.length === 0) {
         window.alert("Enter a search term")
     } else {
@@ -41,10 +52,8 @@ function triggerSearch() {
         }
         results.innerHTML = '';
         let JSElement = document.createElement('script');
-        JSElement.src = `https://www.googleapis.com/customsearch/v1?key=${key}&cx=${id}&q=${input}&orTerms="${statesSearchString}"` + '&callback=hndlr';
+        JSElement.src = `https://www.googleapis.com/customsearch/v1?key=${key}&cx=${id}&q=${input}&orTerms="${statesSearchString}"&excludeTerms="${excludeWords}"&exactTerms="${includeWords}"` + '&callback=hndlr';
         document.getElementsByTagName('head')[0].appendChild(JSElement);
 
-    }
+    };
 }
-
-
