@@ -3,8 +3,8 @@ let id = "9a352a89890a7adf4";                             // CSE ID
 
 let allStatesMap = new Map();
 
-allStatesMap["California"] = "site:https://www.pharmacy.ca.gov";
-allStatesMap["Florida"] = "site:https://floridaspharmacy.gov";
+allStatesMap["California"] = "site%3Awww.pharmacy.ca.gov";
+allStatesMap["Florida"] = "site%3Afloridaspharmacy.gov";
 
 
 window.onload = function () {
@@ -28,21 +28,23 @@ const searchButton = document.querySelector("#start")
 function triggerSearch() {
     event.preventDefault();
     const input = inputSearch.value;
-    let selectedStates = document.getElementsByClassName("dropdown-item selected")
-    console.log(selectedStates);
-    let statesSearchString = "\"";
-    for (let i = 0; i < selectedStates.length; i++) {
-        statesSearchString += allStatesMap[selectedStates[i].text];
-        statesSearchString += " OR "
-        console.log(statesSearchString);
-    }
-    statesSearchString += "\""
-    console.log(statesSearchString);
-    results.innerHTML = '';
-    let JSElement = document.createElement('script');
-    JSElement.src = `https://www.googleapis.com/customsearch/v1?key=${key}&cx=${id}q=${input}&orTerms=${statesSearchString}` + '&callback=hndlr';
-    document.getElementsByTagName('head')[0].appendChild(JSElement);
+    if (inputSearch.value.length === 0) {
+        window.alert("Enter a search term")
+    } else {
+        let selectedStates = document.getElementsByClassName("dropdown-item selected")
+        console.log(selectedStates);
+        let statesSearchString = "";
+        for (let i = 0; i < selectedStates.length; i++) {
+            statesSearchString += allStatesMap[selectedStates[i].text];
+            statesSearchString += " OR "
+            console.log(statesSearchString);
+        }
+        results.innerHTML = '';
+        let JSElement = document.createElement('script');
+        JSElement.src = `https://www.googleapis.com/customsearch/v1?key=${key}&cx=${id}&q=${input}&orTerms="${statesSearchString}"` + '&callback=hndlr';
+        document.getElementsByTagName('head')[0].appendChild(JSElement);
 
+    }
 }
 
 
