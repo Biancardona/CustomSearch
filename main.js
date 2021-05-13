@@ -12,7 +12,6 @@ allStatesMap["Texas"] = "site%3Awww.pharmacy.texas.gov";
 
 
 
-
 window.onload = function () {
     document.querySelector('#search').addEventListener('click', triggerSearch)
 }
