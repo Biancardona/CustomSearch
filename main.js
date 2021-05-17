@@ -81,10 +81,14 @@ function setUp() {
 
 
 let Controller = {
-    addPost: (q) => {
+    addPost: (q, includeWord, excludeWord, statesSearchArray) => {
         const db = firebase.firestore();
         return db.collection('searches').add({
             q: q,
+            includeWord: includeWord,
+            excludeWord: excludeWord,
+            statesSearchArray: statesSearchArray,
+
 
         })
     },
@@ -99,8 +103,19 @@ let saveSearch = () => {
 
     event.preventDefault();
     let q = document.getElementById("query");
+    let includeWord = document.getElementById("textAreaExample3");
+    let excludeWord = document.getElementById("textAreaExample4");
 
-    Controller.addPost(q.value)
+    let cities = document.getElementsByClassName("dropdown-item selected")
+    let statesSearchArray = [];
+    for (let i = 0; i < cities.length; i++) {
+        statesSearchArray += allStatesMap[cities[i].text];
+        statesSearchArray += " OR "
+        console.log(statesSearchArray);
+    }
+
+
+    Controller.addPost(q.value, includeWord.value, excludeWord.value, statesSearchArray)
         .then((snapshot) => {
             console.log('Document written with ID: ', snapshot.id);
         })
