@@ -81,23 +81,23 @@ function setUp() {
 
 
 let Controller = {
-    addPost: (q, includeWord, excludeWord, statesSearchArray) => {
+    addPost: (q, includeWord, excludeWord, statesSearchArray, searchName) => {
         const db = firebase.firestore();
-        return db.collection('searches').add({
+        return db.collection('searches').doc(searchName).set({
             q: q,
             includeWord: includeWord,
             excludeWord: excludeWord,
             statesSearchArray: statesSearchArray,
 
-
         })
     },
     getPost: () => {
         const snapshot = db.collection('searches');
-        return snapshot.get({
-        })
+        return snapshot.get({})
     },
 }
+
+
 
 let saveSearch = () => {
 
@@ -105,6 +105,8 @@ let saveSearch = () => {
     let q = document.getElementById("query");
     let includeWord = document.getElementById("textAreaExample3");
     let excludeWord = document.getElementById("textAreaExample4");
+    let searchName = prompt("Please enter a name for your search");
+
 
     let cities = document.getElementsByClassName("dropdown-item selected")
     let statesSearchArray = [];
@@ -115,9 +117,9 @@ let saveSearch = () => {
     }
 
 
-    Controller.addPost(q.value, includeWord.value, excludeWord.value, statesSearchArray)
-        .then((snapshot) => {
-            console.log('Document written with ID: ', snapshot.id);
+    Controller.addPost(q.value, includeWord.value, excludeWord.value, statesSearchArray, searchName)
+        .then(() => {
+            console.log('New search successfully saved!');
         })
         .catch(function (error) {
             console.log(error.code);
