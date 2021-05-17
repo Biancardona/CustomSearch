@@ -85,6 +85,7 @@ let Controller = {
         const db = firebase.firestore();
         return db.collection('searches').add({
             q: q,
+
         })
     },
     getPost: () => {
