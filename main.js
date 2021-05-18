@@ -23,7 +23,7 @@ function hndlr(response) {
     for (var i = 0; i < response.items.length; i++) {
         var item = response.items[i];
 
-        document.getElementById("content").innerHTML += "<br>" + item.htmlTitle + "<br>" + "<a href =URL> " + item.link + "</a>";
+        document.getElementById("content").innerHTML += "<br>" + item.htmlTitle + "<br>" + `<a href="${item.link}">` + item.link + "</a>";
     }
 }
 
