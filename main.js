@@ -1,3 +1,5 @@
+
+
 let key = "AIzaSyA5gbq4gQ83AEP633ET52IbloKJiKlOAks"; // API KEY
 let id = "9a352a89890a7adf4"; // CSE ID
 
@@ -15,6 +17,8 @@ allStatesMap["Texas"] = "site%3Awww.pharmacy.texas.gov";
 window.onload = function () {
     document.querySelector('#search').addEventListener('click', triggerSearch);
     document.querySelector('#save_search').addEventListener('click', saveSearch);
+    document.querySelector('#customSwitches').addEventListener('click', viewSavedSearches);
+
     setUp();
 }
 
@@ -23,7 +27,7 @@ function hndlr(response) {
     for (var i = 0; i < response.items.length; i++) {
         var item = response.items[i];
 
-        document.getElementById("content").innerHTML += "<br>" + item.htmlTitle + "<br>" + "<a href =URL> " + item.link + "</a>";
+        document.getElementById("content").innerHTML += "<br>" + item.htmlTitle + "<br>" + `<a href="${item.link}">` + item.link + "</a>";
     }
 }
 
@@ -80,7 +84,7 @@ function setUp() {
 }
 
 
-let Controller = {
+let Firestore = {
     addPost: (q, includeWord, excludeWord, statesSearchArray, searchName) => {
         const db = firebase.firestore();
         return db.collection('searches').doc(searchName).set({
@@ -92,8 +96,8 @@ let Controller = {
         })
     },
     getPost: () => {
-        const snapshot = db.collection('searches');
-        return snapshot.get({})
+        const db = firebase.firestore();
+        return db.collection('searches').get()
     },
 }
 
@@ -113,11 +117,11 @@ let saveSearch = () => {
     for (let i = 0; i < cities.length; i++) {
         statesSearchArray += allStatesMap[cities[i].text];
         statesSearchArray += " OR "
-        console.log(statesSearchArray);
+
     }
 
 
-    Controller.addPost(q.value, includeWord.value, excludeWord.value, statesSearchArray, searchName)
+    Firestore.addPost(q.value, includeWord.value, excludeWord.value, statesSearchArray, searchName)
         .then(() => {
             console.log('New search successfully saved!');
         })
@@ -125,5 +129,45 @@ let saveSearch = () => {
             console.log(error.code);
             console.log(error.message);
         })
+}
+
+let viewSavedSearches = (searchName) => {
+    const element = document.getElementById("customSwitches");
+    const searchesSaved = document.getElementById("published");
+    if (element.classList.contains("selected")) {
+        searchesSaved.style.display = "none";
+        ///hide searches
+        element.classList.add("unselected");
+        element.classList.remove("selected");
+
+    } else {
+        ///display searches
+        element.classList.add("selected");
+        searchesSaved.style.display = "block";
+        element.classList.remove("unselected");
+
+
+    }
+
+    Firestore.getPost(searchName)
+        .then((querySnapshot) => {
+            document.getElementById("published").innerHTML = "";
+            const list = document.createElement('ul');
+            document.getElementById("published").appendChild(list).value = "";
+            querySnapshot.forEach((doc) => {
+                document.getElementById("published").appendChild(list).value = "";
+                const item = document.createElement('li');
+                const att = document.createAttribute('id');
+                att.value = doc.id;
+                list.appendChild(item);
+                item.innerHTML = "Search saved: " + doc.id + " Include Words: " + doc.data().includeWord + " Exclude Words: " + doc.data().excludeWord + " Search Input: " + doc.data().q;
+
+                // doc.data() is never undefined for query doc snapshots
+                console.log(doc.id, " => ", doc.data());
+            })
+                .catch(function (error) {
+                    console.log("Error getting documents: ", error);
+                });
+        });
 
 }

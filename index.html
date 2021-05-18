@@ -12,50 +12,58 @@
         href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/css/bootstrap-select.min.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <title>Mark Charette</title>
-    
+
 </head>
 
 <body>
-    <div class="row"> 
-    <div class="container">
-        <form action="#">
-            <div class="form-group">
-                <select id="selectAll" class="selectpicker" data-actions-box="true" multiple>
-                    <option value="1">California</option>
-                    <option value="2">Florida</option>
-                    <option value="3">Kentucky</option>
-                    <option value="4">Pennsylvania</option>
-                    <option value="5">SD</option>
-                    <option value="6">Texas</option>
-                </select>
-            </div>
+    <div class="row">
+        <div class="container">
+            <form action="#">
+                <div class="form-group">
+                    <select id="selectAll" class="selectpicker" data-actions-box="true" multiple>
+                        <option value="1">California</option>
+                        <option value="2">Florida</option>
+                        <option value="3">Kentucky</option>
+                        <option value="4">Pennsylvania</option>
+                        <option value="5">SD</option>
+                        <option value="6">Texas</option>
+                    </select>
+                </div>
 
-            <div class="form-group">
-            <!-- Textarea with class .w-25 -->
-            <div class="form-outline w-25 mb-4">
-            
-                <label class="form-label" for="textAreaExample4">Must Not includes words</label>
-                <textarea class="form-control" id="textAreaExample4" placeholder="Must Not includes words" rows="3"></textarea>
-                <label class="form-label" for="textAreaExample4">Must Includes words</label>
-                <textarea class="form-control" id="textAreaExample3" placeholder="Must Includes words" rows="3"></textarea>
-                <button type="button" id= "save_search" class="btn btn-success">Save Search</button>
-           
-        </div>
-    </div>
-            <div id="start" class="hidden">
+                <div class="form-group">
+                    <!-- Textarea with class .w-25 -->
+                    <div class="form-outline w-25 mb-4">
 
-                <!-- The form -->
+                        <label class="form-label" for="textAreaExample4">Must Not includes words</label>
+                        <textarea class="form-control" id="textAreaExample4" placeholder="Must Not includes words"
+                            rows="3"></textarea>
+                        <label class="form-label" for="textAreaExample4">Must Includes words</label>
+                        <textarea class="form-control" id="textAreaExample3" placeholder="Must Includes words"
+                            rows="3"></textarea>
+                        <button type="button" id="save_search" class="btn btn-success">Save Search</button>
+                        <!-- Default switch -->
+                        <div class="custom-control custom-switch">
+                            <input type="checkbox" class="custom-control-input" id="customSwitches">
+                            <label class="custom-control-label" for="customSwitches">View all searches </label>
+                          </div>
 
-                <div class="input-group">
-                    <input id="query" type="text" class="form-control" placeholder="Search">
-                    <div class="input-group-append">
-                        <button id="search" class="btn btn-secondary btnSearch" type="submit">
-                            <i class="fa fa-search"></i>
-                        </button>
                     </div>
                 </div>
-            </div>
-            <div id="content" class="hide show"> </div>
+                <div id="start" class="hidden">
+
+                    <!-- The form -->
+
+                    <div class="input-group">
+                        <input id="query" type="text" class="form-control" placeholder="Search">
+                        <div class="input-group-append">
+                            <button id="search" class="btn btn-secondary btnSearch" type="submit">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                <div id="published"></div>
+                <div id="content"> </div>
         </div>
     </div>
     </div>
@@ -71,7 +79,7 @@
     </script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.14/dist/js/bootstrap-select.min.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
-    <script  src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
     <script src="main.js"></script>
 
 
