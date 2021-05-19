@@ -19,6 +19,7 @@ window.onload = function () {
     document.querySelector('#save_search').addEventListener('click', saveSearch);
     document.querySelector('#customSwitches').addEventListener('click', viewSavedSearches);
 
+
     setUp();
 }
 
@@ -27,10 +28,10 @@ function hndlr(response) {
     for (var i = 0; i < response.items.length; i++) {
         var item = response.items[i];
 
-        document.getElementById("content").innerHTML += "<br>" + item.htmlTitle + "<br>" + `<a href="${item.link}">` + item.link + "</a>";
+        document.getElementById("content").innerHTML += "<br>" + item.htmlTitle + "<br>" + `<a href="${item.link}" target ="_blank">` + item.link + "</a>";
     }
 }
-
+let search = document.querySelectorAll('.search');
 const idContainer = document.querySelector('#container');
 const inputSearch = document.querySelector("#query");
 const results = document.querySelector("#content");
@@ -110,13 +111,10 @@ let saveSearch = () => {
     let includeWord = document.getElementById("textAreaExample3");
     let excludeWord = document.getElementById("textAreaExample4");
     let searchName = prompt("Please enter a name for your search");
-
-
     let cities = document.getElementsByClassName("dropdown-item selected")
     let statesSearchArray = [];
     for (let i = 0; i < cities.length; i++) {
-        statesSearchArray += allStatesMap[cities[i].text];
-        statesSearchArray += " OR "
+        statesSearchArray.push(cities[i].innerText);
 
     }
 
@@ -159,15 +157,38 @@ let viewSavedSearches = (searchName) => {
                 const item = document.createElement('li');
                 const att = document.createAttribute('id');
                 att.value = doc.id;
+                item.setAttributeNode(att);
+                item.setAttribute('class', 'search');
                 list.appendChild(item);
-                item.innerHTML = "Search saved: " + doc.id + " Include Words: " + doc.data().includeWord + " Exclude Words: " + doc.data().excludeWord + " Search Input: " + doc.data().q;
+
+                item.innerHTML = "SEARCH SAVED: " + doc.id;
 
                 // doc.data() is never undefined for query doc snapshots
                 console.log(doc.id, " => ", doc.data());
+                elemId();
             })
                 .catch(function (error) {
                     console.log("Error getting documents: ", error);
                 });
         });
 
+}
+let repeatSearch = (event) => {
+    const eventId = event.currentTarget.id;
+    event.preventDefault()
+
+}
+
+
+
+
+let elemId = () => {
+    search = document.querySelectorAll('.search')
+    search.forEach(elem => {
+        elem.addEventListener('click', (e) => {
+            const id = e.target.getAttribute('id');
+            console.log("Se ha clickeado el id " + id);
+            repeatSearch(e);
+        });
+    });
 }
