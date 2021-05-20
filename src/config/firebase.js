@@ -1,4 +1,4 @@
-export default {
+export const firebaseConfig = {
   apiKey: "AIzaSyBjE_o5Yn2kFS1pznRhMTsiKgJ8dSkG5Qg",
   authDomain: "customsearch-8c1e9.firebaseapp.com",
   projectId: "customsearch-8c1e9",
