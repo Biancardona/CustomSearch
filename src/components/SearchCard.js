@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { Button, Card, Dropdown, Grid, Input } from "semantic-ui-react";
+import { Button, Card, Dropdown, Grid, Input, Message } from "semantic-ui-react";
 import { search } from "../services/search-engine";
 
-const SearchCard = ({ onSearch = (results) => {} }) => {
+const SearchCard = ({ onSearch = (results) => { } }) => {
   const [query, setQuery] = useState("");
 
   const options = [
@@ -61,6 +61,9 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
               />
             </Grid.Column>
           </Grid.Row>
+          <Grid.Column>
+            <Message floating content='Avanced Syntax ' />
+          </Grid.Column>
         </Grid>
       </Card.Content>
       <Card.Content>
