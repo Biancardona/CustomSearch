@@ -96,10 +96,15 @@ let Firestore = {
 
         })
     },
-    getPost: () => {
+    getAllPosts: () => {
         const db = firebase.firestore();
         return db.collection('searches').get()
     },
+    getPost: (id) => {
+        const db = firebase.firestore();
+        return db.collection('searches').doc(id).get();
+    },
+
 }
 
 
@@ -147,7 +152,7 @@ let viewSavedSearches = (searchName) => {
 
     }
 
-    Firestore.getPost(searchName)
+    Firestore.getAllPosts(searchName)
         .then((querySnapshot) => {
             document.getElementById("published").innerHTML = "";
             const list = document.createElement('ul');
@@ -160,9 +165,7 @@ let viewSavedSearches = (searchName) => {
                 item.setAttributeNode(att);
                 item.setAttribute('class', 'search');
                 list.appendChild(item);
-
                 item.innerHTML = "SEARCH SAVED: " + doc.id;
-
                 // doc.data() is never undefined for query doc snapshots
                 console.log(doc.id, " => ", doc.data());
                 elemId();
@@ -173,9 +176,17 @@ let viewSavedSearches = (searchName) => {
         });
 
 }
-let repeatSearch = (event) => {
-    const eventId = event.currentTarget.id;
-    event.preventDefault()
+let repeatSearch = (e) => {
+    const id = e.target.getAttribute('id');
+    console.log("Se ha clickeado el id " + id);
+    Firestore.getPost(id)
+        .then((doc) => {
+
+            console.log(doc.id, " => ", doc.data());
+        })
+        .catch(function (error) {
+            console.log("Error getting documents: ", error);
+        });
 
 }
 
@@ -185,10 +196,6 @@ let repeatSearch = (event) => {
 let elemId = () => {
     search = document.querySelectorAll('.search')
     search.forEach(elem => {
-        elem.addEventListener('click', (e) => {
-            const id = e.target.getAttribute('id');
-            console.log("Se ha clickeado el id " + id);
-            repeatSearch(e);
-        });
+        elem.addEventListener('click', repeatSearch);
     });
 }
