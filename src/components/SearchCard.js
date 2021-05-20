@@ -11,12 +11,13 @@ import {
   Loader,
   Modal,
   Segment,
+  Message,
   Table,
 } from "semantic-ui-react";
 import { search } from "../services/search-engine";
 import SaveSearchModal from "./SaveSearchModal";
 
-const SearchCard = ({ onSearch = (results) => {} }) => {
+const SearchCard = ({ onSearch = (results) => { } }) => {
   const [query, setQuery] = useState("");
   const [excludedTerms, setExcludedTerms] = useState([]);
   const [includedTerms, setIncludedTerms] = useState([]);
@@ -104,16 +105,16 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
                       {(d) =>
                         d.value
                           ? d.value.map((item, index) => (
-                              <Table.Row>
-                                <Table.Cell>{d.ids[index]}</Table.Cell>
-                                <Table.Cell>{item.q}</Table.Cell>
-                                <Table.Cell>
-                                  {item.statesSearchArray.join(", ")}
-                                </Table.Cell>
-                                <Table.Cell>{item.includeWord}</Table.Cell>
-                                <Table.Cell>{item.excludeWord}</Table.Cell>
-                              </Table.Row>
-                            ))
+                            <Table.Row>
+                              <Table.Cell>{d.ids[index]}</Table.Cell>
+                              <Table.Cell>{item.q}</Table.Cell>
+                              <Table.Cell>
+                                {item.statesSearchArray.join(", ")}
+                              </Table.Cell>
+                              <Table.Cell>{item.includeWord}</Table.Cell>
+                              <Table.Cell>{item.excludeWord}</Table.Cell>
+                            </Table.Row>
+                          ))
                           : null
                       }
                     </FirestoreCollection>
@@ -192,6 +193,9 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
               />
             </Grid.Column>
           </Grid.Row>
+          <Grid.Column>
+            <Message floating content='Avanced Syntax ' />
+          </Grid.Column>
         </Grid>
       </Card.Content>
       <Card.Content>
