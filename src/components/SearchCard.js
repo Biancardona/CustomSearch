@@ -14,6 +14,7 @@ import {
   Table,
 } from "semantic-ui-react";
 import { search } from "../services/search-engine";
+import SaveSearchModal from "./SaveSearchModal";
 
 const SearchCard = ({ onSearch = (results) => {} }) => {
   const [query, setQuery] = useState("");
@@ -220,6 +221,7 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
                 >
                   Save
                 </Button>
+                <SaveSearchModal></SaveSearchModal>
                 <Button primary onClick={onSearchHandler}>
                   Search
                 </Button>
