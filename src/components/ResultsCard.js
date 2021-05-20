@@ -10,7 +10,7 @@ const ResultsCard = ({ results = [] }) => {
       </Card.Content>
       <Card.Content>
         {results.map((result) => (
-          <ResultItem key={result.cacheId} result={result}></ResultItem>
+          <ResultItem key={result.link} result={result}></ResultItem>
         ))}
       </Card.Content>
     </Card>

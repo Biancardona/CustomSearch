@@ -8,6 +8,10 @@ export const search = ({
   exactTerms = [],
 }) => {
   return axios.get(
-    `https://www.googleapis.com/customsearch/v1?key=${GoogleAPI.key}&cx=${GoogleAPI.cx}&q=${query}&orTerms="${orTerms}"&excludeTerms="${excludeTerms}"&exactTerms="${exactTerms}"`
+    `https://www.googleapis.com/customsearch/v1?key=${GoogleAPI.key}&cx=${
+      GoogleAPI.cx
+    }&q=${query}&orTerms=${orTerms.join()}&excludeTerms=${excludeTerms.join(
+      " "
+    )}&exactTerms=${exactTerms.join(" ")}`
   );
 };
