@@ -1,10 +1,13 @@
 import React from "react";
 
-const ResultItem = () => (
+const ResultItem = ({ result = {} }) => (
   <div>
-    <p>URL</p>
-    <h3>Result title</h3>
-    <p>Description</p>
+    <p>{result.link}</p>
+    <a href={result.link}>
+      <h3>{result.title}</h3>
+    </a>
+    <p>{result.snippet}</p>
+    <br></br>
   </div>
 );
 

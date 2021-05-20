@@ -2,16 +2,16 @@ import React, { useState } from "react";
 import { Button, Card, Dropdown, Grid, Input } from "semantic-ui-react";
 import { search } from "../services/search-engine";
 
-const SearchCard = () => {
+const SearchCard = ({ onSearch = (results) => {} }) => {
+  const [query, setQuery] = useState("");
+
   const options = [
     { key: "angular", text: "Angular", value: "angular" },
     { key: "css", text: "CSS", value: "css" },
   ];
 
-  const [query, setQuery] = useState("");
-
   const onSearchHandler = () => {
-    search(query).then(console.log);
+    search({ query }).then((response) => onSearch(response.data.items));
   };
 
   return (
@@ -25,7 +25,7 @@ const SearchCard = () => {
               fluid
               icon="search"
               value={query}
-              onChange={(event) => setQuery(event.target.value)}
+              onChange={(event, { value }) => setQuery(value)}
             />
           </Grid.Column>
         </Grid>
