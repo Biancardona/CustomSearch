@@ -54,16 +54,16 @@ const SaveSearchModal = () => {
                 {(d) =>
                   d.value
                     ? d.value.map((item, index) => (
-                        <Table.Row>
-                          <Table.Cell>{d.ids[index]}</Table.Cell>
-                          <Table.Cell>{item.q}</Table.Cell>
-                          <Table.Cell>
-                            {item.statesSearchArray.join(", ")}
-                          </Table.Cell>
-                          <Table.Cell>{item.includeWord}</Table.Cell>
-                          <Table.Cell>{item.excludeWord}</Table.Cell>
-                        </Table.Row>
-                      ))
+                      <Table.Row>
+                        <Table.Cell>{d.ids[index]}</Table.Cell>
+                        <Table.Cell>{item.q}</Table.Cell>
+                        <Table.Cell>
+                          {item.statesSearchArray.join(", ")}
+                        </Table.Cell>
+                        <Table.Cell>{item.includeWord}</Table.Cell>
+                        <Table.Cell>{item.excludeWord}</Table.Cell>
+                      </Table.Row>
+                    ))
                     : null
                 }
               </FirestoreCollection>

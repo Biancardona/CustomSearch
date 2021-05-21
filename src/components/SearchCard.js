@@ -11,7 +11,7 @@ import {
   Loader,
   Modal,
   Segment,
-  Header,
+  Message,
   Table,
 } from "semantic-ui-react";
 import { search } from "../services/search-engine";
@@ -194,33 +194,9 @@ const SearchCard = ({ onSearch = (results) => { } }) => {
             </Grid.Column>
           </Grid.Row>
           <Grid.Column>
-            <Modal
-              closeIcon
-              centered={false}
-              open={open}
-              trigger={<Button> Avanced Syntax</Button>}
-              onClose={() => setOpen(false)}
-              onOpen={() => setOpen(true)}
-              floating content='Avanced Syntax'>
-              <Header icon='archive' content='Using your Programmable Search Engine' />
-              <Modal.Content image scrolling>
-                <Modal.Description>
 
-                  This tutorial will help you create a customized search in just a few minutes.
-                  This tutorial explains how to implement a simple Programmable Search Engine using a predefined javascript widget.
-                  <p>There are two ways of creating a Programmable Search Engine:
-                    using the Control Panel</p>
-                  <p>creating an XML file with the definition of the engine.</p>
-                  <p>The easiest way to get started with Programmable Search Engine
-                    is to create a basic search engine using the Control Panel.</p>
-                  <p>You can then download the engine's XML files and modify them to add further customizations.</p>
-                  <p>Since you're experimenting and figuring out some basic concepts,</p>
-                  <p>spend only a couple of minutes making your first search engine.</p>
-                  <p>Keep it simple so that you can follow what's happening when you start testing it.</p>
-                  <p>You can always change it later.</p>
-                </Modal.Description>
-              </Modal.Content>
-            </Modal>
+            <Message floating content='Avanced Syntax ' />
+
           </Grid.Column>
         </Grid>
       </Card.Content>
