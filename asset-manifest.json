@@ -1,0 +1,26 @@
+{
+  "files": {
+    "main.css": "/CustomSearch/static/css/main.e832fb42.chunk.css",
+    "main.js": "/CustomSearch/static/js/main.e90bdd1a.chunk.js",
+    "main.js.map": "/CustomSearch/static/js/main.e90bdd1a.chunk.js.map",
+    "runtime-main.js": "/CustomSearch/static/js/runtime-main.116e1fcb.js",
+    "runtime-main.js.map": "/CustomSearch/static/js/runtime-main.116e1fcb.js.map",
+    "static/css/2.c2986f35.chunk.css": "/CustomSearch/static/css/2.c2986f35.chunk.css",
+    "static/js/2.d0ab5eb4.chunk.js": "/CustomSearch/static/js/2.d0ab5eb4.chunk.js",
+    "static/js/2.d0ab5eb4.chunk.js.map": "/CustomSearch/static/js/2.d0ab5eb4.chunk.js.map",
+    "static/js/3.94328d31.chunk.js": "/CustomSearch/static/js/3.94328d31.chunk.js",
+    "static/js/3.94328d31.chunk.js.map": "/CustomSearch/static/js/3.94328d31.chunk.js.map",
+    "index.html": "/CustomSearch/index.html",
+    "static/css/2.c2986f35.chunk.css.map": "/CustomSearch/static/css/2.c2986f35.chunk.css.map",
+    "static/css/main.e832fb42.chunk.css.map": "/CustomSearch/static/css/main.e832fb42.chunk.css.map",
+    "static/js/2.d0ab5eb4.chunk.js.LICENSE.txt": "/CustomSearch/static/js/2.d0ab5eb4.chunk.js.LICENSE.txt",
+    "static/media/semantic.min.css": "/CustomSearch/static/media/outline-icons.ddae9b1b.woff"
+  },
+  "entrypoints": [
+    "static/js/runtime-main.116e1fcb.js",
+    "static/css/2.c2986f35.chunk.css",
+    "static/js/2.d0ab5eb4.chunk.js",
+    "static/css/main.e832fb42.chunk.css",
+    "static/js/main.e90bdd1a.chunk.js"
+  ]
+}
