@@ -169,6 +169,17 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
                     { key: data.value, text: data.value, value: data.value },
                   ]);
                 }}
+                onChange={(event, { value }) => {
+                  setIncludedTerms(
+                    value.map((term) => {
+                      return {
+                        key: term,
+                        text: term,
+                        value: term,
+                      };
+                    })
+                  );
+                }}
               />
             </Grid.Column>
             <Grid.Column>
@@ -189,6 +200,17 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
                     ...excludedTerms,
                     { key: data.value, text: data.value, value: data.value },
                   ]);
+                }}
+                onChange={(event, { value }) => {
+                  setExcludedTerms(
+                    value.map((term) => {
+                      return {
+                        key: term,
+                        text: term,
+                        value: term,
+                      };
+                    })
+                  );
                 }}
               />
             </Grid.Column>
