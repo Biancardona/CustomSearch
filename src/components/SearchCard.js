@@ -77,7 +77,11 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
       <Card.Content>
         <Card.Header className="d-inline">Unnamed</Card.Header>
         <div className="d-inline float-right">
-          <Button>
+          <Button
+            onClick={() =>
+              window.open("https://moz.com/learn/seo/search-operators")
+            }
+          >
             <Icon name="help circle"></Icon>
             Avanced Syntax
           </Button>
