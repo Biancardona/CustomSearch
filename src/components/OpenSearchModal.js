@@ -35,7 +35,6 @@ const OpenSearchModal = ({ onOpenSearch }) => {
                 <Table.HeaderCell>Excluded terms</Table.HeaderCell>
               </Table.Row>
             </Table.Header>
-
             <Table.Body>
               <FirestoreCollection path="/searches/">
                 {(d) =>
@@ -44,7 +43,14 @@ const OpenSearchModal = ({ onOpenSearch }) => {
                         <Table.Row
                           key={d.ids[index]}
                           onClick={() => {
-                            onOpenSearch({ name: d.ids[index], ...d });
+                            onOpenSearch({
+                              name: d.ids[index],
+                              ...d.value[index],
+                            });
+                            console.log({
+                              name: d.ids[index],
+                              ...d.value[index],
+                            });
                             setOpen(false);
                           }}
                         >

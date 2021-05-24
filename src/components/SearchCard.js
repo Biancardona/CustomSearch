@@ -1,3 +1,4 @@
+import firebase from "firebase";
 import React, { useState } from "react";
 import { Button, Card, Dropdown, Grid, Icon, Input } from "semantic-ui-react";
 import { search } from "../services/search-engine";
@@ -5,6 +6,7 @@ import OpenSearchModal from "./OpenSearchModal";
 import SaveSearchModal from "./SaveSearchModal";
 
 const SearchCard = ({ onSearch = (results) => {} }) => {
+  const [title, setTitle] = useState("Unnamed");
   const [query, setQuery] = useState("");
   const [excludedTerms, setExcludedTerms] = useState([]);
   const [includedTerms, setIncludedTerms] = useState([]);
@@ -45,7 +47,6 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
   ];
 
   const onSearchHandler = () => {
-    console.log(selectedURLs, excludedTerms, includedTerms);
     search({
       query,
       orTerms: selectedURLs,
@@ -54,18 +55,38 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
     }).then((response) => onSearch(response.data.items));
   };
 
+  const onResetHanlder = () => {
+    setTitle("Unnamed");
+    setQuery("");
+    setIncludedTerms([]);
+    setExcludedTerms([]);
+    setSelectedURLs([]);
+    onSearch([]);
+  };
+
   const onOpenSearchHandler = (search) => {
+    onSearch([]);
+    setTitle(search.name);
     setQuery(search.q || "");
     setIncludedTerms(
-      (search.includeWord || "").split("").map((term) => {
-        return { key: term.value, text: term.value, value: term.value };
+      (search.includeWord || "").split(" ").map((term) => {
+        return { key: term, text: term, value: term };
       })
     );
     setExcludedTerms(
-      (search.excludeWord || "").split("").map((term) => {
-        return { key: term.value, text: term.value, value: term.value };
+      (search.excludeWord || "").split(" ").map((term) => {
+        return { key: term, text: term, value: term };
       })
     );
+    setSelectedURLs(search.statesSearchArray);
+  };
+
+  const onSaveSearchHandler = onOpenSearchHandler;
+
+  const onDeleteHandler = () => {
+    const db = firebase.firestore();
+    db.collection("searches").doc(title).delete();
+    onResetHanlder();
   };
 
   const onSelectURLs = (event, { value }) => {
@@ -75,7 +96,7 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
   return (
     <Card fluid>
       <Card.Content>
-        <Card.Header className="d-inline">Unnamed</Card.Header>
+        <Card.Header className="d-inline">{title}</Card.Header>
         <div className="d-inline float-right">
           <Button
             onClick={() =>
@@ -125,6 +146,7 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
                 multiple
                 allowAdditions
                 options={includedTerms}
+                value={includedTerms.map((term) => term.value)}
                 onAddItem={(event, data) => {
                   setIncludedTerms([
                     ...includedTerms,
@@ -145,6 +167,7 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
                 multiple
                 allowAdditions
                 options={excludedTerms}
+                value={excludedTerms.map((term) => term.value)}
                 onAddItem={(event, data) => {
                   setExcludedTerms([
                     ...excludedTerms,
@@ -160,12 +183,15 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
         <Grid>
           <Grid.Row>
             <Grid.Column>
-              <Button color="red">Delete</Button>
+              <Button color="red" onClick={onDeleteHandler}>
+                Delete
+              </Button>
               <div className="d-inline float-right">
-                <Button>Reset</Button>
+                <Button onClick={onResetHanlder}>Reset</Button>
                 <Button>Save</Button>
                 <SaveSearchModal
                   {...{ query, selectedURLs, includedTerms, excludedTerms }}
+                  onSaveSearch={onSaveSearchHandler}
                 ></SaveSearchModal>
                 <Button primary onClick={onSearchHandler}>
                   Search

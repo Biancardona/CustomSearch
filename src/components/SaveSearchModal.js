@@ -25,7 +25,15 @@ const SaveSearchModal = (props) => {
         includeWord: props.includedTerms.map((term) => term.value).join(" "),
         excludeWord: props.excludedTerms.map((term) => term.value).join(" "),
       })
-      .then(() => setOpen(false));
+      .then((search) => {
+        setOpen(false);
+        if (props.onSaveSearch) {
+          db.collection("searches")
+            .doc(name)
+            .get()
+            .then((doc) => props.onSaveSearch({ name, ...doc.data() }));
+        }
+      });
   };
   return (
     <Modal
