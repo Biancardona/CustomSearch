@@ -1,58 +1,26 @@
 import { FirestoreCollection } from "@react-firebase/firestore";
-import firebase from "firebase";
 import React, { useState } from "react";
 import {
   Button,
   Dimmer,
-  Grid,
-  Input,
   Loader,
   Modal,
   Segment,
   Table,
 } from "semantic-ui-react";
 
-const SaveSearchModal = (props) => {
+const OpenSearchModal = ({ onOpenSearch }) => {
   const [open, setOpen] = useState(false);
-  const [name, setName] = useState("");
-  const saveSearch = () => {
-    const db = firebase.firestore();
-    db.collection("searches")
-      .doc(name)
-      .set({
-        q: props.query,
-        statesSearchArray: props.selectedURLs,
-        includeWord: props.includedTerms.map((term) => term.value).join(" "),
-        excludeWord: props.excludedTerms.map((term) => term.value).join(" "),
-      })
-      .then(() => setOpen(false));
-  };
+
   return (
     <Modal
       onClose={() => setOpen(false)}
       onOpen={() => setOpen(true)}
       open={open}
-      trigger={<Button>Save As</Button>}
+      trigger={<Button>Open</Button>}
     >
-      <Modal.Header>Save a Search</Modal.Header>
+      <Modal.Header>Select a Search</Modal.Header>
       <Modal.Content>
-        <Grid>
-          <Grid.Row>
-            <Grid.Column width={13}>
-              <Input
-                fluid
-                placeholder="Search name"
-                value={name}
-                onChange={(e, { value }) => setName(value)}
-              ></Input>
-            </Grid.Column>
-            <Grid.Column width={3}>
-              <Button fluid primary onClick={() => saveSearch()}>
-                Save
-              </Button>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
         <Segment>
           <Dimmer active={false}>
             <Loader size="medium">Loading</Loader>
@@ -73,7 +41,13 @@ const SaveSearchModal = (props) => {
                 {(d) =>
                   d.value
                     ? d.value.map((item, index) => (
-                        <Table.Row>
+                        <Table.Row
+                          key={d.ids[index]}
+                          onClick={() => {
+                            onOpenSearch({ name: d.ids[index], ...d });
+                            setOpen(false);
+                          }}
+                        >
                           <Table.Cell>{d.ids[index]}</Table.Cell>
                           <Table.Cell>{item.q}</Table.Cell>
                           <Table.Cell>
@@ -97,4 +71,4 @@ const SaveSearchModal = (props) => {
   );
 };
 
-export default SaveSearchModal;
+export default OpenSearchModal;
