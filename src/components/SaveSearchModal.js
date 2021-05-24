@@ -11,12 +11,16 @@ import {
   Segment,
   Table,
 } from "semantic-ui-react";
+import OverwriteSearchConfirmation from "./OverwriteSearchConfirmation";
 
 const SaveSearchModal = (props) => {
   const [open, setOpen] = useState(false);
+  const [showConfirmation, setShowConfirmation] = useState(false);
   const [name, setName] = useState("");
-  const saveSearch = () => {
-    const db = firebase.firestore();
+
+  const db = firebase.firestore();
+
+  const save = () => {
     db.collection("searches")
       .doc(name)
       .set({
@@ -33,75 +37,101 @@ const SaveSearchModal = (props) => {
             .get()
             .then((doc) => props.onSaveSearch({ name, ...doc.data() }));
         }
+        setName("");
+        setShowConfirmation(false);
       });
   };
-  return (
-    <Modal
-      onClose={() => setOpen(false)}
-      onOpen={() => setOpen(true)}
-      open={open}
-      trigger={<Button>Save As</Button>}
-    >
-      <Modal.Header>Save a Search</Modal.Header>
-      <Modal.Content>
-        <Grid>
-          <Grid.Row>
-            <Grid.Column width={13}>
-              <Input
-                fluid
-                placeholder="Search name"
-                value={name}
-                onChange={(e, { value }) => setName(value)}
-              ></Input>
-            </Grid.Column>
-            <Grid.Column width={3}>
-              <Button fluid primary onClick={() => saveSearch()}>
-                Save
-              </Button>
-            </Grid.Column>
-          </Grid.Row>
-        </Grid>
-        <Segment>
-          <Dimmer active={false}>
-            <Loader size="medium">Loading</Loader>
-          </Dimmer>
-          <Table celled selectable>
-            <Table.Header>
-              <Table.Row>
-                <Table.HeaderCell>Name</Table.HeaderCell>
-                <Table.HeaderCell>Query</Table.HeaderCell>
-                <Table.HeaderCell>Limited to URLs</Table.HeaderCell>
-                <Table.HeaderCell>Included terms</Table.HeaderCell>
-                <Table.HeaderCell>Excluded terms</Table.HeaderCell>
-              </Table.Row>
-            </Table.Header>
 
-            <Table.Body>
-              <FirestoreCollection path="/searches/">
-                {(d) =>
-                  d.value
-                    ? d.value.map((item, index) => (
-                        <Table.Row>
-                          <Table.Cell>{d.ids[index]}</Table.Cell>
-                          <Table.Cell>{item.q}</Table.Cell>
-                          <Table.Cell>
-                            {item.statesSearchArray.join(", ")}
-                          </Table.Cell>
-                          <Table.Cell>{item.includeWord}</Table.Cell>
-                          <Table.Cell>{item.excludeWord}</Table.Cell>
-                        </Table.Row>
-                      ))
-                    : null
-                }
-              </FirestoreCollection>
-            </Table.Body>
-          </Table>
-        </Segment>
-      </Modal.Content>
-      <Modal.Actions>
-        <Button onClick={() => setOpen(false)}>Close</Button>
-      </Modal.Actions>
-    </Modal>
+  const saveSearch = () => {
+    if (name !== "" && name !== "Unnamed") {
+      db.collection("searches")
+        .doc(name)
+        .get()
+        .then((doc) => {
+          if (doc.data()) {
+            setShowConfirmation(true);
+          } else {
+            save();
+          }
+        });
+    }
+  };
+
+  return (
+    <div className="d-inline">
+      <OverwriteSearchConfirmation
+        title={name}
+        open={showConfirmation}
+        onCancel={() => setShowConfirmation(false)}
+        onOverwriteSearch={() => save()}
+      ></OverwriteSearchConfirmation>
+      <Modal
+        onClose={() => setOpen(false)}
+        onOpen={() => setOpen(true)}
+        open={open}
+        trigger={<Button>Save As</Button>}
+      >
+        <Modal.Header>Save a Search</Modal.Header>
+        <Modal.Content>
+          <Grid>
+            <Grid.Row>
+              <Grid.Column width={13}>
+                <Input
+                  fluid
+                  placeholder="Search name"
+                  value={name}
+                  onChange={(e, { value }) => setName(value)}
+                ></Input>
+              </Grid.Column>
+              <Grid.Column width={3}>
+                <Button fluid primary onClick={() => saveSearch()}>
+                  Save
+                </Button>
+              </Grid.Column>
+            </Grid.Row>
+          </Grid>
+          <Segment>
+            <Dimmer active={false}>
+              <Loader size="medium">Loading</Loader>
+            </Dimmer>
+            <Table celled selectable>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>Name</Table.HeaderCell>
+                  <Table.HeaderCell>Query</Table.HeaderCell>
+                  <Table.HeaderCell>Limited to URLs</Table.HeaderCell>
+                  <Table.HeaderCell>Included terms</Table.HeaderCell>
+                  <Table.HeaderCell>Excluded terms</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
+
+              <Table.Body>
+                <FirestoreCollection path="/searches/">
+                  {(d) =>
+                    d.value
+                      ? d.value.map((item, index) => (
+                          <Table.Row>
+                            <Table.Cell>{d.ids[index]}</Table.Cell>
+                            <Table.Cell>{item.q}</Table.Cell>
+                            <Table.Cell>
+                              {item.statesSearchArray.join(", ")}
+                            </Table.Cell>
+                            <Table.Cell>{item.includeWord}</Table.Cell>
+                            <Table.Cell>{item.excludeWord}</Table.Cell>
+                          </Table.Row>
+                        ))
+                      : null
+                  }
+                </FirestoreCollection>
+              </Table.Body>
+            </Table>
+          </Segment>
+        </Modal.Content>
+        <Modal.Actions>
+          <Button onClick={() => setOpen(false)}>Close</Button>
+        </Modal.Actions>
+      </Modal>
+    </div>
   );
 };
 

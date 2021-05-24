@@ -47,10 +47,6 @@ const OpenSearchModal = ({ onOpenSearch }) => {
                               name: d.ids[index],
                               ...d.value[index],
                             });
-                            console.log({
-                              name: d.ids[index],
-                              ...d.value[index],
-                            });
                             setOpen(false);
                           }}
                         >

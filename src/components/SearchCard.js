@@ -2,7 +2,9 @@ import firebase from "firebase";
 import React, { useState } from "react";
 import { Button, Card, Dropdown, Grid, Icon, Input } from "semantic-ui-react";
 import { search } from "../services/search-engine";
+import DeleteSearchConfirmation from "./DeleteSearchConfirmation";
 import OpenSearchModal from "./OpenSearchModal";
+import SaveSearchConfirmation from "./SaveSearchConfirmation";
 import SaveSearchModal from "./SaveSearchModal";
 
 const SearchCard = ({ onSearch = (results) => {} }) => {
@@ -84,8 +86,6 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
   const onSaveSearchHandler = onOpenSearchHandler;
 
   const onDeleteHandler = () => {
-    const db = firebase.firestore();
-    db.collection("searches").doc(title).delete();
     onResetHanlder();
   };
 
@@ -221,14 +221,16 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
         <Grid>
           <Grid.Row>
             <Grid.Column>
-              <Button onClick={onDeleteHandler} disabled={title === "Unnamed"}>
-                Delete
-              </Button>
+              <DeleteSearchConfirmation
+                title={title}
+                onDeleteSeach={onDeleteHandler}
+              ></DeleteSearchConfirmation>
               <div className="d-inline float-right">
                 <Button onClick={onResetHanlder}>Reset</Button>
-                <Button onClick={onSaveHandler} disabled={title === "Unnamed"}>
-                  Save
-                </Button>
+                <SaveSearchConfirmation
+                  name={title}
+                  onSaveSearch={onSaveHandler}
+                ></SaveSearchConfirmation>
                 <SaveSearchModal
                   {...{ query, selectedURLs, includedTerms, excludedTerms }}
                   onSaveSearch={onSaveSearchHandler}
