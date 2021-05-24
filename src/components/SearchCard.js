@@ -93,6 +93,22 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
     setSelectedURLs(value);
   };
 
+  const onSaveHandler = () => {
+    if (title !== "Unnamed") {
+      const db = firebase.firestore();
+      db.collection("searches")
+        .doc(title)
+        .set({
+          q: query,
+          statesSearchArray: selectedURLs,
+          includeWord: includedTerms.map((term) => term.value).join(" "),
+          excludeWord: excludedTerms.map((term) => term.value).join(" "),
+        })
+        .then(() => {});
+    } else {
+    }
+  };
+
   return (
     <Card fluid>
       <Card.Content>
@@ -183,12 +199,14 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
         <Grid>
           <Grid.Row>
             <Grid.Column>
-              <Button color="red" onClick={onDeleteHandler}>
+              <Button onClick={onDeleteHandler} disabled={title === "Unnamed"}>
                 Delete
               </Button>
               <div className="d-inline float-right">
                 <Button onClick={onResetHanlder}>Reset</Button>
-                <Button>Save</Button>
+                <Button onClick={onSaveHandler} disabled={title === "Unnamed"}>
+                  Save
+                </Button>
                 <SaveSearchModal
                   {...{ query, selectedURLs, includedTerms, excludedTerms }}
                   onSaveSearch={onSaveSearchHandler}
