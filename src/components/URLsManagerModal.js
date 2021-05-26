@@ -1,3 +1,5 @@
+import { FirestoreCollection } from "@react-firebase/firestore";
+import firebase from "firebase";
 import React, { useState } from "react";
 import { Button, Confirm, Grid, Input, Modal, Table } from "semantic-ui-react";
 import EditURLModal from "./EditURLModal";
@@ -5,6 +7,30 @@ import EditURLModal from "./EditURLModal";
 const URLsManagerModal = () => {
   const [open, setOpen] = useState(false);
   const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
+  const [name, setName] = useState("");
+  const [url, setURL] = useState("");
+
+  const db = firebase.firestore();
+
+  const save = ({ onSave = () => {} }) => {
+    const collection = db.collection("urls");
+    collection
+      .doc(name)
+      .set({
+        name: name,
+        url: url,
+      })
+      .then((search) => {
+        if (onSave) {
+          collection
+            .doc(name)
+            .get()
+            .then((doc) => onSave({ name, ...doc.data() }));
+        }
+        setName("");
+        setURL("");
+      });
+  };
 
   return (
     <Modal
@@ -18,13 +44,23 @@ const URLsManagerModal = () => {
         <Grid>
           <Grid.Row>
             <Grid.Column width={6}>
-              <Input fluid placeholder="Name" />
+              <Input
+                fluid
+                placeholder="Name"
+                value={name}
+                onChange={(e, { value }) => setName(value)}
+              />
             </Grid.Column>
             <Grid.Column width={8}>
-              <Input fluid placeholder="URL" />
+              <Input
+                fluid
+                placeholder="URL"
+                value={url}
+                onChange={(e, { value }) => setURL(value)}
+              />
             </Grid.Column>
             <Grid.Column width={2}>
-              <Button fluid primary>
+              <Button fluid primary onClick={save}>
                 Save
               </Button>
             </Grid.Column>
@@ -42,28 +78,36 @@ const URLsManagerModal = () => {
           </Table.Header>
 
           <Table.Body>
-            <Table.Row>
-              <Table.Cell>California</Table.Cell>
-              <Table.Cell>
-                <a href={"https://www.pharmacy.com.ca"}>www.pharmacy.com.ca</a>
-              </Table.Cell>
-              <Table.Cell>
-                <EditURLModal></EditURLModal>
-                <Button
-                  icon="trash"
-                  color="red"
-                  onClick={() => setOpenDeleteConfirmation(true)}
-                ></Button>
-                <Confirm
-                  negative
-                  content={"Do you want to delete this URL?"}
-                  open={openDeleteConfirmation}
-                  confirmButton="Yes, delete it"
-                  onCancel={() => setOpenDeleteConfirmation(false)}
-                  onConfirm={() => setOpenDeleteConfirmation(false)}
-                />
-              </Table.Cell>
-            </Table.Row>
+            <FirestoreCollection path="/urls/">
+              {(d) =>
+                d.value
+                  ? d.value.map((item, index) => (
+                      <Table.Row>
+                        <Table.Cell>{item.name}</Table.Cell>
+                        <Table.Cell>
+                          <a href={item.url}>{item.url}</a>
+                        </Table.Cell>
+                        <Table.Cell>
+                          <EditURLModal></EditURLModal>
+                          <Button
+                            icon="trash"
+                            color="red"
+                            onClick={() => setOpenDeleteConfirmation(true)}
+                          ></Button>
+                          <Confirm
+                            negative
+                            content={"Do you want to delete this URL?"}
+                            open={openDeleteConfirmation}
+                            confirmButton="Yes, delete it"
+                            onCancel={() => setOpenDeleteConfirmation(false)}
+                            onConfirm={() => setOpenDeleteConfirmation(false)}
+                          />
+                        </Table.Cell>
+                      </Table.Row>
+                    ))
+                  : null
+              }
+            </FirestoreCollection>
           </Table.Body>
         </Table>
       </Modal.Content>
