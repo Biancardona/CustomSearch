@@ -11,11 +11,11 @@ const URLsManagerModal = () => {
   const [url, setURL] = useState("");
 
   const db = firebase.firestore();
+  const collection = db.collection("urls");
 
   const save = ({ onSave = () => {} }) => {
-    const collection = db.collection("urls");
     collection
-      .doc(name)
+      .doc()
       .set({
         name: name,
         url: url,
@@ -30,6 +30,23 @@ const URLsManagerModal = () => {
         setName("");
         setURL("");
       });
+  };
+
+  const remove = ({ id, name, url }) => {
+    collection
+      .doc(id)
+      .delete()
+      .then(() => {
+        setOpenDeleteConfirmation(false);
+      });
+  };
+
+  const update = ({ id, name, url }) => {
+    console.log(name);
+    collection.doc(id).set({
+      name,
+      url,
+    });
   };
 
   return (
@@ -82,13 +99,16 @@ const URLsManagerModal = () => {
               {(d) =>
                 d.value
                   ? d.value.map((item, index) => (
-                      <Table.Row>
+                      <Table.Row key={d.ids[index]}>
                         <Table.Cell>{item.name}</Table.Cell>
                         <Table.Cell>
                           <a href={item.url}>{item.url}</a>
                         </Table.Cell>
                         <Table.Cell>
-                          <EditURLModal></EditURLModal>
+                          <EditURLModal
+                            item={{ id: d.ids[index], ...item }}
+                            onUpdate={update}
+                          ></EditURLModal>
                           <Button
                             icon="trash"
                             color="red"
@@ -100,7 +120,9 @@ const URLsManagerModal = () => {
                             open={openDeleteConfirmation}
                             confirmButton="Yes, delete it"
                             onCancel={() => setOpenDeleteConfirmation(false)}
-                            onConfirm={() => setOpenDeleteConfirmation(false)}
+                            onConfirm={() =>
+                              remove({ id: d.ids[index], ...item })
+                            }
                           />
                         </Table.Cell>
                       </Table.Row>
