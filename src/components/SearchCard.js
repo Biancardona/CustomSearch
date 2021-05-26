@@ -6,6 +6,7 @@ import DeleteSearchConfirmation from "./DeleteSearchConfirmation";
 import OpenSearchModal from "./OpenSearchModal";
 import SaveSearchConfirmation from "./SaveSearchConfirmation";
 import SaveSearchModal from "./SaveSearchModal";
+import URLsManagerModal from "./URLsManagerModal";
 
 const SearchCard = ({ onSearch = (results) => {} }) => {
   const [title, setTitle] = useState("Unnamed");
@@ -144,13 +145,13 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
               <h4>Limit to URLs</h4>
               <Dropdown
                 placeholder="Limit to URLs"
-                fluid
                 multiple
                 selection
                 options={limitToURLs}
                 value={selectedURLs}
                 onChange={onSelectURLs}
               ></Dropdown>
+              <URLsManagerModal></URLsManagerModal>
             </Grid.Column>
             <Grid.Column>
               <h4>Must include</h4>
