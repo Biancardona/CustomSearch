@@ -14,42 +14,26 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
   const [excludedTerms, setExcludedTerms] = useState([]);
   const [includedTerms, setIncludedTerms] = useState([]);
   const [selectedURLs, setSelectedURLs] = useState([]);
+  const [availableURLs, setAvailableURLs] = useState([]);
 
-  const limitToURLs = [
-    {
-      key: "site%3Awww.pharmacy.ca.gov",
-      text: "California",
-      value: "site%3Awww.pharmacy.ca.gov",
-    },
-    {
-      key: "site%3Afloridaspharmacy.gov",
-      text: "Florida",
-      value: "site%3Afloridaspharmacy.gov",
-    },
-    {
-      key: "site%3Apharmacy.ky.gov",
-      text: "Kentucky",
-      value: "site%3Apharmacy.ky.gov",
-    },
-    {
-      key: "site%3Awww.dos.pa.gov/ProfessionalLicensing/BoardsCommissions/Pharmacy",
-      text: "Pennsylvania",
-      value:
-        "site%3Awww.dos.pa.gov/ProfessionalLicensing/BoardsCommissions/Pharmacy",
-    },
-    {
-      key: "site%3Adoh.sd.gov/boards/pharmacy",
-      text: "SD",
-      value: "site%3Adoh.sd.gov/boards/pharmacy",
-    },
-    {
-      key: "site%3Awww.pharmacy.texas.gov",
-      text: "Texas",
-      value: "site%3Awww.pharmacy.texas.gov",
-    },
-  ];
+  const db = firebase.firestore();
+
+  db.collection("urls")
+    .get()
+    .then((result) => {
+      setAvailableURLs(
+        result.docs.map((item) => {
+          return {
+            key: item.id,
+            text: item.data().name,
+            value: item.id,
+          };
+        })
+      );
+    });
 
   const onSearchHandler = () => {
+    db.collection("urls").get({});
     search({
       query,
       orTerms: selectedURLs,
@@ -96,7 +80,6 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
 
   const onSaveHandler = () => {
     if (title !== "Unnamed") {
-      const db = firebase.firestore();
       db.collection("searches")
         .doc(title)
         .set({
@@ -147,7 +130,7 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
                 placeholder="Limit to URLs"
                 multiple
                 selection
-                options={limitToURLs}
+                options={availableURLs}
                 value={selectedURLs}
                 onChange={onSelectURLs}
               ></Dropdown>
