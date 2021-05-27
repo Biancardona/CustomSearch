@@ -1,7 +1,7 @@
 import firebase from "firebase";
 import React, { useState } from "react";
 import { Button, Card, Dropdown, Grid, Icon, Input } from "semantic-ui-react";
-import { search } from "../services/search-engine";
+import { search } from "./../services/search-engine";
 import DeleteSearchConfirmation from "./DeleteSearchConfirmation";
 import OpenSearchModal from "./OpenSearchModal";
 import SaveSearchConfirmation from "./SaveSearchConfirmation";
@@ -33,13 +33,19 @@ const SearchCard = ({ onSearch = (results) => {} }) => {
     });
 
   const onSearchHandler = () => {
-    db.collection("urls").get({});
-    search({
-      query,
-      orTerms: selectedURLs,
-      excludeTerms: excludedTerms.map((term) => term.value),
-      exactTerms: includedTerms.map((term) => term.value),
-    }).then((response) => onSearch(response.data.items));
+    db.collection("urls")
+      .get()
+      .then((result) => {
+        search({
+          query,
+          orTerms: selectedURLs.map((key) => {
+            const url = result.docs.find(({ id }) => id === key)?.data()?.url;
+            return url ? "site%3A" + url : "";
+          }),
+          excludeTerms: excludedTerms.map((term) => term.value),
+          exactTerms: includedTerms.map((term) => term.value),
+        }).then((response) => onSearch(response.data.items));
+      });
   };
 
   const onResetHanlder = () => {
