@@ -1,12 +1,11 @@
 import { FirestoreCollection } from "@react-firebase/firestore";
 import firebase from "firebase";
 import React, { useState } from "react";
-import { Button, Confirm, Grid, Input, Modal, Table } from "semantic-ui-react";
+import { Button, Grid, Input, Modal, Table } from "semantic-ui-react";
 import EditURLModal from "./EditURLModal";
 
 const URLsManagerModal = () => {
   const [open, setOpen] = useState(false);
-  const [openDeleteConfirmation, setOpenDeleteConfirmation] = useState(false);
   const [name, setName] = useState("");
   const [url, setURL] = useState("");
 
@@ -36,9 +35,7 @@ const URLsManagerModal = () => {
     collection
       .doc(id)
       .delete()
-      .then(() => {
-        setOpenDeleteConfirmation(false);
-      });
+      .then(() => {});
   };
 
   const update = ({ id, name, url }) => {
@@ -112,18 +109,10 @@ const URLsManagerModal = () => {
                           <Button
                             icon="trash"
                             color="red"
-                            onClick={() => setOpenDeleteConfirmation(true)}
-                          ></Button>
-                          <Confirm
-                            negative
-                            content={"Do you want to delete this URL?"}
-                            open={openDeleteConfirmation}
-                            confirmButton="Yes, delete it"
-                            onCancel={() => setOpenDeleteConfirmation(false)}
-                            onConfirm={() =>
-                              remove({ id: d.ids[index], ...item })
+                            onClick={() =>
+                              remove({ ...item, id: d.ids[index] })
                             }
-                          />
+                          ></Button>
                         </Table.Cell>
                       </Table.Row>
                     ))
